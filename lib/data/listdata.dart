@@ -1,0 +1,23 @@
+import 'package:flutter_application_1/data/globalclass.dart';
+
+List<Money> geter() {
+  Money upwork = Money();
+  upwork.name = 'upwork';
+  upwork.fee = '650';
+  upwork.time = 'today';
+  upwork.image = 'simcard.jpg';
+  upwork.buy = false;
+  Money starbucks = Money();
+  starbucks.buy = true;
+  starbucks.fee = '15';
+  starbucks.image = 'simcard.jpg';
+  starbucks.name = 'starbucks';
+  starbucks.time = 'today';
+  Money trasfer = Money();
+  trasfer.buy = true;
+  trasfer.fee = '100';
+  trasfer.image = 'simcard.jpg';
+  trasfer.name = 'trasfer for sam';
+  trasfer.time = 'jan 30,2022';
+  return [upwork, starbucks, trasfer];
+}
