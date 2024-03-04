@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/data/listdata.dart';
+import 'package:flutter_application_1/views/customtext.dart';
 
 class Dashboard extends StatelessWidget {
   const Dashboard({super.key});
@@ -19,20 +20,16 @@ class Dashboard extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      'Transactions history',
-                      style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 15,
-                          color: Colors.black),
-                    ),
-                    Text(
-                      'See all',
-                      style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 15,
-                          color: Colors.grey),
-                    ),
+                    CustomText(
+                        label: 'Transactions history',
+                        fontWeight: FontWeight.w600,
+                        fontSize: 15,
+                        labelColor: Colors.black),
+                    CustomText(
+                        label: 'See all',
+                        fontWeight: FontWeight.w600,
+                        fontSize: 15,
+                        labelColor: Colors.grey),
                   ],
                 ),
               ),
@@ -119,20 +116,16 @@ class Dashboard extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          'Good Morning',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 16,
-                              color: Color.fromARGB(255, 224, 223, 223)),
-                        ),
-                        Text(
-                          'Abel Mwirigi',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 20,
-                              color: Color.fromARGB(255, 224, 223, 223)),
-                        ),
+                        CustomText(
+                            label: 'Good Morning',
+                            fontWeight: FontWeight.w500,
+                            fontSize: 16,
+                            labelColor: Color.fromARGB(255, 224, 223, 223)),
+                        CustomText(
+                            label: 'Abel Mwirigi',
+                            fontWeight: FontWeight.w600,
+                            fontSize: 20,
+                            labelColor: Color.fromARGB(255, 224, 223, 223)),
                       ],
                     ),
                   ),
@@ -156,7 +149,7 @@ class Dashboard extends StatelessWidget {
                   spreadRadius: 6,
                 ),
               ],
-              color: const Color.fromARGB(255, 47, 125, 121),
+              color: Color.fromARGB(255, 53, 139, 139),
               borderRadius: BorderRadius.circular(15),
             ),
             child: const Column(
@@ -169,13 +162,11 @@ class Dashboard extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        'Total Balance',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 16,
-                          color: Colors.white,
-                        ),
+                      CustomText(
+                        label: 'Total Balance',
+                        fontWeight: FontWeight.w500,
+                        fontSize: 16,
+                        labelColor: Colors.white,
                       ),
                       Icon(
                         Icons.more_horiz,
@@ -191,14 +182,12 @@ class Dashboard extends StatelessWidget {
                   padding: EdgeInsets.only(left: 15),
                   child: Row(
                     children: [
-                      Text(
-                        '\$ 2,954',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
-                          color: Colors.white,
-                        ),
-                      )
+                      CustomText(
+                        label: '\$ 2,954',
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                        labelColor: Colors.white,
+                      ),
                     ],
                   ),
                 ),
@@ -224,13 +213,11 @@ class Dashboard extends StatelessWidget {
                           SizedBox(
                             width: 7,
                           ),
-                          Text(
-                            'Income',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 15,
-                              color: Colors.white,
-                            ),
+                          CustomText(
+                            label: 'Income',
+                            fontWeight: FontWeight.w500,
+                            fontSize: 15,
+                            labelColor: Colors.white,
                           ),
                         ],
                       ),
@@ -248,13 +235,11 @@ class Dashboard extends StatelessWidget {
                           SizedBox(
                             width: 7,
                           ),
-                          Text(
-                            'Expenses',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 15,
-                              color: Colors.white,
-                            ),
+                          CustomText(
+                            label: 'Expenses',
+                            fontWeight: FontWeight.w500,
+                            fontSize: 15,
+                            labelColor: Colors.white,
                           ),
                         ],
                       ),
@@ -269,21 +254,17 @@ class Dashboard extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        '\$ 1,450',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 15,
-                          color: Colors.white,
-                        ),
+                      CustomText(
+                        label: '\$ 1,450',
+                        fontWeight: FontWeight.w500,
+                        fontSize: 15,
+                        labelColor: Colors.white,
                       ),
-                      Text(
-                        '\$ 450',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 15,
-                          color: Colors.white,
-                        ),
+                      CustomText(
+                        label: '\$ 450',
+                        fontWeight: FontWeight.w500,
+                        fontSize: 15,
+                        labelColor: Colors.white,
                       ),
                     ],
                   ),

@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/configs/constants.dart';
 import 'package:flutter_application_1/controllers/homeController.dart';
 import 'package:flutter_application_1/views/dashboard.dart';
+import 'package:flutter_application_1/views/statistics.dart';
 import 'package:get/get.dart';
 
 HomeController homeController = Get.put(HomeController());
 
 var screens = [
   Dashboard(),
+  Statistics(),
   Text("profile"),
   Text("settings"),
 ];
@@ -25,6 +27,10 @@ class Home extends StatelessWidget {
           items: const [
             Icon(
               Icons.home,
+              color: appWhiteColor,
+            ),
+            Icon(
+              Icons.bar_chart_outlined,
               color: appWhiteColor,
             ),
             Icon(
