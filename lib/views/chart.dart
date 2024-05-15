@@ -1,43 +1,37 @@
 import 'package:flutter/material.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:pie_chart/pie_chart.dart';
 
-class Chart extends StatefulWidget {
-  const Chart({super.key});
+class PieChartWidget extends StatelessWidget {
+  final Map<String, double> dataMap;
 
-  @override
-  State<Chart> createState() => _chartState();
-}
+  const PieChartWidget({Key? key, required this.dataMap}) : super(key: key);
 
-class _chartState extends State<Chart> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        width: double.infinity,
-        height: 700,
-        child: SfCartesianChart(
-            primaryXAxis: CategoryAxis(),
-            series: <SplineSeries<SalesData, String>>[
-              SplineSeries<SalesData, String>(
-                color: Color.fromARGB(255, 47, 125, 121),
-                dataSource: <SalesData>[
-                  SalesData('Jan', 100),
-                  SalesData('Feb', 20),
-                  SalesData('Mar', 40),
-                  SalesData('Apr', 15),
-                  SalesData('May', 5)
-                ],
-                xValueMapper: (SalesData sales, _) => sales.year,
-                yValueMapper: (SalesData sales, _) => sales.sales,
-              )
-            ]),
+    return PieChart(
+      dataMap: dataMap,
+      animationDuration: Duration(milliseconds: 800),
+      chartLegendSpacing: 32,
+      chartRadius: MediaQuery.of(context).size.width / 2,
+      initialAngleInDegree: 0,
+      chartType: ChartType.ring,
+      ringStrokeWidth: 32,
+      centerText: "HYBRID",
+      legendOptions: LegendOptions(
+        showLegendsInRow: false,
+        legendPosition: LegendPosition.right,
+        showLegends: true,
+        legendTextStyle: TextStyle(
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      chartValuesOptions: ChartValuesOptions(
+        showChartValueBackground: true,
+        showChartValues: true,
+        showChartValuesInPercentage: false,
+        showChartValuesOutside: false,
+        decimalPlaces: 1,
       ),
     );
   }
-}
-
-class SalesData {
-  SalesData(this.year, this.sales);
-  final String year;
-  final double sales;
 }

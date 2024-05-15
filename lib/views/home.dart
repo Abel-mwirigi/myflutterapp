@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/configs/constants.dart';
 import 'package:flutter_application_1/controllers/homeController.dart';
 import 'package:flutter_application_1/views/dashboard.dart';
+import 'package:flutter_application_1/views/expandable_fab.dart';
+import 'package:flutter_application_1/views/profile.dart';
 import 'package:flutter_application_1/views/statistics.dart';
+import 'package:flutter_application_1/views/transactionpost.dart';
 import 'package:get/get.dart';
 
 HomeController homeController = Get.put(HomeController());
@@ -11,8 +14,8 @@ HomeController homeController = Get.put(HomeController());
 var screens = [
   Dashboard(),
   Statistics(),
-  Text("profile"),
-  Text("settings"),
+  ProfilePage(),
+  //TransactionForm(),
 ];
 
 class Home extends StatelessWidget {
@@ -37,10 +40,6 @@ class Home extends StatelessWidget {
               Icons.person,
               color: appWhiteColor,
             ),
-            Icon(
-              Icons.settings,
-              color: appWhiteColor,
-            ),
           ],
           onTap: (index) {
             homeController.updateSelectedPage(index);
@@ -48,6 +47,33 @@ class Home extends StatelessWidget {
       body: Obx(() => Center(
             child: screens[homeController.selectedpage.value],
           )),
+          floatingActionButton: ExpandableFab(
+        distance: 112,
+        children: [
+          ActionButton(
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return TransactionFormDialog();
+                },
+              );
+              //homeController.updateSelectedPage(3);
+              // Add your logic here
+              print('Action 1 pressed');
+            },
+            icon: Icon(Icons.add),
+          ),
+          ActionButton(
+            onPressed: () {
+              homeController.updateSelectedPage(2);
+              // Add your logic here
+              print('Action 2 pressed');
+            },
+            icon: Icon(Icons.person),
+          ),
+        ],
+      ),
     );
   }
 }

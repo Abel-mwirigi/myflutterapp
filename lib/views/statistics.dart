@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/data/top.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:flutter_application_1/views/chart.dart';
 import 'package:flutter_application_1/views/customtext.dart';
+import 'package:get/get.dart';
+import 'package:flutter_application_1/controllers/UserController.dart';
 
 class Statistics extends StatefulWidget {
   const Statistics({super.key});
@@ -10,10 +14,48 @@ class Statistics extends StatefulWidget {
 }
 
 class _StatisticsState extends State<Statistics> {
+  List<Transaction> transactions = [];
+  Map<String, double> dataMap = {};
+
+   @override
+  void initState() {
+    super.initState();
+    fetchData();
+  }
+
+  Future<void> fetchData() async {
+    final userController = Get.find<UserController>();
+    final response = await http.get(Uri.parse(
+        'http://127.0.0.1:8000/user/user/${userController.getUser()?.id ?? "User"}/transactions/'));
+    if (response.statusCode == 200) {
+      final List<dynamic> responseData = json.decode(response.body);
+      final Map<String, double> updatedDataMap = processData(responseData);
+      setState(() {
+        transactions = responseData.map((data) => Transaction.fromJson(data)).toList();
+        dataMap = updatedDataMap;
+      });
+    } else {
+      throw Exception('Failed to load data');
+    }
+  }
+
+  Map<String, double> processData(List<dynamic> responseData) {
+    // Process fetched data into the format expected by the pie chart
+    final Map<String, double> processedData = {};
+    responseData.forEach((data) {
+      final String name = data['name'] as String;
+      final double fee = double.parse(data['fee'] as String);
+      processedData[name] = fee;
+    });
+    return processedData;
+  }
   List day = ['Day', 'Week', 'Month', 'Year'];
   int index_color = 0;
   @override
   Widget build(BuildContext context) {
+     // Sort transactions based on fee (convert to double first)
+    transactions
+        .sort((a, b) => double.parse(b.fee).compareTo(double.parse(a.fee)));
     return Scaffold(
       body: SafeArea(
         child: CustomScrollView(
@@ -27,85 +69,24 @@ class _StatisticsState extends State<Statistics> {
                         fontSize: 30,
                         fontWeight: FontWeight.w700,
                         labelColor: Colors.black),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      ...List.generate(
-                        4,
-                        (index) {
-                          return GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                index_color = index;
-                              });
-                            },
-                            child: Container(
-                              height: 40,
-                              width: 80,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: index_color == index
-                                    ? Color.fromARGB(255, 47, 125, 121)
-                                    : Colors.white,
-                              ),
-                              alignment: Alignment.center,
-                              child: Text(
-                                day[index],
-                                style: TextStyle(
-                                  color: index_color == index
-                                      ? Colors.white
-                                      : Colors.black,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 10),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Container(
-                          width: 120,
-                          height: 40,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              CustomText(
-                                label: 'Expense',
-                                    labelColor: Colors.grey,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold),
-                              Icon(Icons.arrow_downward_sharp,
-                                  color: Colors.grey),
-                            ],
-                          ),
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: Colors.grey,
-                              width: 2,
-                            ),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                      ],
+
+                  CustomText(
+                    label: 'Graphical Representation',
+                    fontSize: 30,
+                    fontWeight: FontWeight.w600,
+                    labelColor: Colors.black45,
                     ),
-                  ),
                   SizedBox(height: 20),
-                  //Chart(),
+                  PieChartWidget(dataMap: dataMap),
+
+                  SizedBox(height: 10),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 15),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         CustomText(
-                          label: 'Top Spending',
+                          label: 'All Transactions',
                               labelColor: Colors.black,
                               fontSize: 20,
                               fontWeight: FontWeight.bold),
@@ -124,25 +105,21 @@ class _StatisticsState extends State<Statistics> {
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
                   return ListTile(
-                      leading: Image.asset(
-                        'assets/images/${geter_top()[index].image!}',
-                        height: 40,
-                      ),
                       title: Text(
-                        geter_top()[index].name!,
+                        transactions[index].name,
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
                       subtitle: Text(
-                        geter_top()[index].time!,
+                        transactions[index].time,
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
                         ),
                       ),
                       trailing: Text(
-                        geter_top()[index].fee!,
+                        transactions[index].fee,
                         style: TextStyle(
                           color: Colors.red,
                           fontSize: 18,
@@ -150,12 +127,35 @@ class _StatisticsState extends State<Statistics> {
                         ),
                       ));
                 },
-                childCount: geter_top().length,
+                childCount: transactions.length,
               ),
             ),
           ],
         ),
       ),
+    );
+  }
+}
+
+class Transaction {
+  final String name;
+  final String time;
+  final String fee;
+  final bool buy;
+
+  Transaction({
+    required this.name,
+    required this.time,
+    required this.fee,
+    required this.buy,
+  });
+
+  factory Transaction.fromJson(Map<String, dynamic> json) {
+    return Transaction(
+      name: json['name'] as String,
+      time: json['time'] as String,
+      fee: json['fee'] as String,
+      buy: json['buy'] as bool,
     );
   }
 }
